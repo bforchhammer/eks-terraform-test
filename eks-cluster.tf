@@ -80,16 +80,24 @@ resource "aws_security_group_rule" "demo-cluster-ingress-workstation-https" {
   type = "ingress"
 }
 
+resource "aws_cloudwatch_log_group" "demo" {
+  name              = "/aws/eks/${var.cluster-name}/cluster"
+  retention_in_days = 1
+}
+
 resource "aws_eks_cluster" "demo" {
   name = var.cluster-name
   role_arn = aws_iam_role.demo-cluster.arn
+  enabled_cluster_log_types = ["api", "audit"]
 
   vpc_config {
     security_group_ids = [aws_security_group.demo-cluster.id]
     subnet_ids = aws_subnet.demo.*.id
+    endpoint_private_access = true
   }
 
   depends_on = [
+    aws_cloudwatch_log_group.demo,
     aws_iam_role_policy_attachment.demo-cluster-AmazonEKSClusterPolicy,
     aws_iam_role_policy_attachment.demo-cluster-AmazonEKSServicePolicy,
   ]
