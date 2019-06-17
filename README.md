@@ -10,7 +10,7 @@ Based on https://github.com/terraform-providers/terraform-provider-aws/tree/mast
 
 ## Setup
 
-Setup EKS cluster in us-west-2 (can take up to 10 minutes):
+Setup EKS cluster in eu-central-1 (can take up to 10 minutes):
 
 ```
 terraform apply
